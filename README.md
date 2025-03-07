@@ -1,5 +1,7 @@
-# quick-note-cli
+# clin
+A CLI-based note-taking tool made for terminal dwellers.
 
+## Dev
 To install dependencies:
 
 ```bash
