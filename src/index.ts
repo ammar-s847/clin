@@ -22,7 +22,10 @@ const saveNotes = (notes: NotesDB) => {
     writeFileSync(DB_FILE, JSON.stringify(notes, null, 2));
 };
 
-const prompt_cohere = async (prompt: string, model: string = "command-r-plus-08-2024"): Promise<string> => {
+const prompt_cohere = async (
+    prompt: string, 
+    model: string = "command-r-plus-08-2024"
+): Promise<string> => {
     var response = await cohere.chat({
         model: model,
         message: prompt,
