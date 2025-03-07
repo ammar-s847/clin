@@ -1,4 +1,17 @@
 import { writeFileSync, readFileSync, existsSync } from "fs";
+import { CohereClient } from "cohere-ai";
+
+const cohere = new CohereClient({
+    token: process.env.COHERE_API_KEY,
+});
+
+const prompt_cohere = async (prompt: string, model: string = "command-r-plus-08-2024"): Promise<string> => {
+    var response = await cohere.chat({
+        model: model,
+        message: prompt,
+    });
+    return response.text;
+};
 
 const DB_FILE = "notes.json";
 
@@ -24,7 +37,7 @@ switch (command) {
     case "add":
         const content = args.join(" ");
         if (!content) {
-            console.log("Usage: bun run index.ts add <note content>");
+            console.log("Usage: bun dev add <note content>");
             break;
         }
         notes.push({ id: Date.now(), content });
@@ -40,6 +53,15 @@ switch (command) {
         const filteredNotes = notes.filter((note) => note.id !== idToDelete);
         saveNotes(filteredNotes);
         console.log("Note deleted!");
+        break;
+    case "prompt":
+        const prompt = args.join(" ");
+        if (!prompt) {
+            console.log("Usage: bun dev prompt <prompt>");
+            break;
+        }
+        var response = await prompt_cohere(prompt);
+        console.log(response);
         break;
     default:
         console.log("Commands: add, list, delete");
