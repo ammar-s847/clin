@@ -5,14 +5,6 @@ const cohere = new CohereClient({
     token: process.env.COHERE_API_KEY,
 });
 
-const prompt_cohere = async (prompt: string, model: string = "command-r-plus-08-2024"): Promise<string> => {
-    var response = await cohere.chat({
-        model: model,
-        message: prompt,
-    });
-    return response.text;
-};
-
 const DB_FILE = "notes.json";
 
 type Note = {
@@ -28,6 +20,14 @@ const loadNotes = (): NotesDB => {
 
 const saveNotes = (notes: NotesDB) => {
     writeFileSync(DB_FILE, JSON.stringify(notes, null, 2));
+};
+
+const prompt_cohere = async (prompt: string, model: string = "command-r-plus-08-2024"): Promise<string> => {
+    var response = await cohere.chat({
+        model: model,
+        message: prompt,
+    });
+    return response.text;
 };
 
 const [command, ...args] = process.argv.slice(2);
